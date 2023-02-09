@@ -1,16 +1,17 @@
-# chess
+<p align="center">
+      <img src="https://user-images.githubusercontent.com/94113684/217728774-b8d83a98-36a3-47d7-a6ac-6676c2ab5169.png" width="100">
+</p>
 
-A new Flutter project.
 
-## Getting Started
+<p align="center">
+   <img src="https://storage.googleapis.com/flutter_infra_release/releases/stable/windows/flutter_windows_3.7.2-stable.zip" alt="Unity Version">
+</p>
 
-This project is a starting point for a Flutter application.
+## About
 
-A few resources to get you started if this is your first Flutter project:
+Application for learning chess with the ability to solve chess problems and play with other users.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Developers
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- [Mikhail Babichev](https://github.com/Mikhailli)
+- [Nikolay Valyaykin](https://github.com/deadcat76)
