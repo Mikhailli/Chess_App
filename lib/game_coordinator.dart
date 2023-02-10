@@ -29,8 +29,12 @@ class GameCoordinator {
         [
           Bishop(PlayerColor.white, Location(2, 0)),
           Bishop(PlayerColor.white, Location(5, 0)),
-          Bishop(PlayerColor.black, Location(2, 7)),
-          Bishop(PlayerColor.black, Location(5, 7))
+          Bishop(PlayerColor.white, Location(2, 7)),
+          Bishop(PlayerColor.white, Location(5, 7)),
+          Bishop(PlayerColor.black, Location(3, 0)),
+          Bishop(PlayerColor.black, Location(6, 0)),
+          Bishop(PlayerColor.black, Location(3, 7)),
+          Bishop(PlayerColor.black, Location(6, 7))
         ]
     );
   }
