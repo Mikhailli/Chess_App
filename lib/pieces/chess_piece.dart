@@ -36,7 +36,11 @@ abstract class ChessPiece {
       this.location);
 
   List<Location> legalMoves(List<ChessPiece> others);
+  List<Location> legalCaptures(List<ChessPiece> others);
 
   bool canMoveTo(int x, int y, List<ChessPiece> others) =>
       legalMoves(others).contains(Location(x, y));
+
+  bool canCapture(int x, int y, List<ChessPiece> others) =>
+      legalCaptures(others).contains(Location(x, y));
 }
