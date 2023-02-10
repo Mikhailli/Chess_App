@@ -52,8 +52,13 @@ class HomeScreenState extends State<HomeScreen> {
   DragTarget<ChessPiece> buildDragTarget(int x, int y) {
     return DragTarget<ChessPiece>(
       onAccept: (piece) {
+        final capturedPiece = coordinator.pieceOfTile(x, y);
+
         setState(() {
           piece.location = Location(x, y);
+          if (capturedPiece != null) {
+            pieces.remove(capturedPiece);
+          }
         });
       },
       onWillAccept: (piece) {
@@ -61,8 +66,10 @@ class HomeScreenState extends State<HomeScreen> {
           return false;
         }
 
-        final accept = piece.canMoveTo(x, y, pieces);
-        return accept;
+        final canMoveTo = piece.canMoveTo(x, y, pieces);
+        final canCapture = piece.canCapture(x, y, pieces);
+
+        return canMoveTo || canCapture;
     },
       builder: (context, data, rejects) => Container(
         decoration: BoxDecoration(
