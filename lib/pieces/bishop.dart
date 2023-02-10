@@ -22,22 +22,24 @@ class Bishop extends ChessPiece {
   List<Location> _generateMovesOnDiagonal(bool isUp, bool isRight, List<ChessPiece> others) {
     bool obstructed = false;
 
-    return List<Location?>.generate(8, (i) {
-      int dx = isRight ? 1: -1;
-      int dy = isUp ? 1 : -1;
+    var list = List<Location?>.generate(8, (i) {
+      int dx = (isRight ? 1: -1) * i;
+      int dy = (isUp ? 1 : -1) * i;
 
-      final position = Location(x + dx, y + dy);
+      final destination = Location(x + dx, y + dy);
 
       final pieceOnLocation =
-          others.any((piece) => piece.location == position);
-      if (pieceOnLocation) {
+          others.any((piece) => piece.location == destination);
+      if (pieceOnLocation && location != destination) {
         obstructed = true;
       }
 
-      return obstructed ? null : position;
+      return obstructed ? null : destination;
     })
         .whereType<Location>()
         .where((location) => location.isValid)
         .toList();
+
+    return list;
   }
 }
