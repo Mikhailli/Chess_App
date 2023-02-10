@@ -1,4 +1,5 @@
 import 'package:chess/pieces/chess_piece.dart';
+import 'package:collection/collection.dart';
 
 class Bishop extends ChessPiece {
   Bishop(
@@ -59,12 +60,20 @@ class Bishop extends ChessPiece {
 
       final pieceOnLocation =
       pieces.any((piece) => piece.location == destination);
-      if (pieceOnLocation && location != destination) {
+
+      final enemyPieceOnLocation =
+      pieces.any((piece) => piece.location == destination && piece.playerColor != playerColor);
+
+      if (enemyPieceOnLocation) {
         hasFoundCapture = true;
         return destination;
       }
 
-      return hasFoundCapture ? null : destination;
+      if (pieceOnLocation) {
+        return null;
+      }
+
+      return null;
     })
         .whereType<Location>()
         .where((location) => location.isValid)
