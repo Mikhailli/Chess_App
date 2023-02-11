@@ -1,5 +1,4 @@
 import 'package:chess/pieces/chess_piece.dart';
-import 'package:collection/collection.dart';
 
 class Bishop extends ChessPiece {
   Bishop(
