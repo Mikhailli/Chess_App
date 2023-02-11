@@ -1,5 +1,6 @@
 import 'package:chess/pieces/bishop.dart';
 import 'package:chess/pieces/chess_piece.dart';
+import 'package:chess/pieces/rook.dart';
 import 'package:collection/collection.dart';
 
 import 'pieces/knight.dart';
@@ -29,14 +30,14 @@ class GameCoordinator {
         //  Bishop(PlayerColor.black, Location(5, 7))
         //],
         [
-          Knight(PlayerColor.white, Location(2, 0)),
-          Knight(PlayerColor.white, Location(5, 0)),
-          Knight(PlayerColor.white, Location(2, 7)),
-          Knight(PlayerColor.white, Location(5, 7)),
+          Rook(PlayerColor.white, Location(2, 0)),
+          Rook(PlayerColor.white, Location(5, 0)),
+          Rook(PlayerColor.white, Location(2, 7)),
+          Rook(PlayerColor.white, Location(5, 7)),
           Knight(PlayerColor.black, Location(3, 0)),
           Knight(PlayerColor.black, Location(6, 0)),
-          Knight(PlayerColor.black, Location(3, 7)),
-          Knight(PlayerColor.black, Location(6, 7))
+          Rook(PlayerColor.black, Location(3, 7)),
+          Rook(PlayerColor.black, Location(6, 7))
         ]
     );
   }
