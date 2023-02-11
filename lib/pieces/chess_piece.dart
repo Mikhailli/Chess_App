@@ -24,6 +24,8 @@ abstract class ChessPiece {
   final PlayerColor playerColor;
   Location location;
 
+  var makeFirstMove = false;
+
   String get name;
 
   String get fileName => "assets/${playerColor.toString().split(".").last}_$name.png";
@@ -36,11 +38,11 @@ abstract class ChessPiece {
       this.location);
 
   List<Location> legalMoves(List<ChessPiece> others);
-  List<Location> legalCaptures(List<ChessPiece> others);
+  List<Location> legalCaptures(List<ChessPiece> others, [bool previousMoveIsEnPassion = false]);
 
   bool canMoveTo(int x, int y, List<ChessPiece> others) =>
       legalMoves(others).contains(Location(x, y));
 
-  bool canCapture(int x, int y, List<ChessPiece> others) =>
-      legalCaptures(others).contains(Location(x, y));
+  bool canCapture(int x, int y, List<ChessPiece> others, [bool previousMoveIsEnPassion = false]) =>
+      legalCaptures(others, previousMoveIsEnPassion).contains(Location(x, y));
 }

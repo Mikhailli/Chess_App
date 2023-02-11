@@ -127,7 +127,7 @@ class Knight extends ChessPiece {
   }
 
   @override
-  List<Location> legalCaptures(List<ChessPiece> others) {
+  List<Location> legalCaptures(List<ChessPiece> others, [bool previousMoveIsEnPassion = false]) {
     return <Location> [
       ..._generateCaptures(others),
       ..._generateCaptures(others),

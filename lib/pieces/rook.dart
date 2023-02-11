@@ -140,7 +140,7 @@ class Rook extends ChessPiece {
   }
 
   @override
-  List<Location> legalCaptures(List<ChessPiece> others) {
+  List<Location> legalCaptures(List<ChessPiece> others, [bool previousMoveIsEnPassion = false]) {
     return <Location> [
       ..._generateCapturesOnVertical(true, others),
       ..._generateCapturesOnVertical(false, others),
