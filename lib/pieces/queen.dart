@@ -206,7 +206,7 @@ class Queen extends ChessPiece {
   }
 
   @override
-  List<Location> legalCaptures(List<ChessPiece> others) {
+  List<Location> legalCaptures(List<ChessPiece> others, [bool previousMoveIsEnPassion = false]) {
     return <Location> [
       ..._generateCapturesOnDiagonal(true, true, others),
       ..._generateCapturesOnDiagonal(false, true, others),
