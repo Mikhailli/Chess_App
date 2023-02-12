@@ -1,5 +1,6 @@
 import 'package:chess/pieces/bishop.dart';
 import 'package:chess/pieces/chess_piece.dart';
+import 'package:chess/pieces/king.dart';
 import 'package:chess/pieces/pawn.dart';
 import 'package:chess/pieces/queen.dart';
 import 'package:chess/pieces/rook.dart';
@@ -12,7 +13,7 @@ class GameCoordinator {
   //final List<ChessPiece> blackPieces;
 
 
-  final List<ChessPiece> pieces;
+  List<ChessPiece> pieces = [];
 
   PlayerColor currentTurn = PlayerColor.white;
 
@@ -39,6 +40,7 @@ class GameCoordinator {
           Bishop(PlayerColor.white, Location(2, 0)),
           Bishop(PlayerColor.white, Location(5, 0)),
           Queen(PlayerColor.white, Location(3, 0)),
+          King(PlayerColor.white, Location(4, 0)),
           Pawn(PlayerColor.white, Location(0, 1)),
           Pawn(PlayerColor.white, Location(1, 1)),
           Pawn(PlayerColor.white, Location(2, 1)),
@@ -54,6 +56,7 @@ class GameCoordinator {
           Bishop(PlayerColor.black, Location(2, 7)),
           Bishop(PlayerColor.black, Location(5, 7)),
           Queen(PlayerColor.black, Location(3, 7)),
+          King(PlayerColor.black, Location(4, 7)),
           Pawn(PlayerColor.black, Location(0, 6)),
           Pawn(PlayerColor.black, Location(1, 6)),
           Pawn(PlayerColor.black, Location(2, 6)),

@@ -1,7 +1,11 @@
 import 'package:chess/game_coordinator.dart';
 import 'package:chess/pieces/pawn.dart';
 import 'package:flutter/material.dart';
+import '../pieces/bishop.dart';
 import '../pieces/chess_piece.dart';
+import '../pieces/knight.dart';
+import '../pieces/queen.dart';
+import '../pieces/rook.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -20,7 +24,7 @@ class HomeScreenState extends State<HomeScreen> {
   var activePlayerColor = PlayerColor.white;
   var previousMoveIsTwoSquarePawnMove = false;
 
-  final GameCoordinator coordinator = GameCoordinator.newGame();
+  GameCoordinator coordinator = GameCoordinator.newGame();
 
   List<ChessPiece> get pieces => coordinator.pieces;
 
@@ -78,6 +82,14 @@ class HomeScreenState extends State<HomeScreen> {
             }
             // Перемещение фигуры
             piece.location = Location(x, y);
+
+            if (piece is Pawn && (y == 0 || y == 7)) {
+                _showSimpleDialog(piece, capturedPiece);
+                activePlayerColor = activePlayerColor == PlayerColor.white
+                    ? PlayerColor.black
+                    : PlayerColor.white;
+                return;
+            }
             // Фигура сделала первый ход, нужно для рокировки и первого хода пешек
             piece.makeFirstMove = true;
 
@@ -86,13 +98,14 @@ class HomeScreenState extends State<HomeScreen> {
               pieces.remove(capturedPiece);
             }
 
+
             // Проверка на совершение взятия на проходе
-            else if (piece is Pawn) {
-                int dy = activePlayerColor == PlayerColor.white ? -1 : 1;
-                if (coordinator.pieceOfTile(piece.x, piece.y + dy) != null) {
-                    pieces.remove(coordinator.pieceOfTile(piece.x, piece.y + dy));
-                  }
+            if (piece is Pawn) {
+              int dy = activePlayerColor == PlayerColor.white ? -1 : 1;
+              if (coordinator.pieceOfTile(piece.x, piece.y + dy) != null) {
+                pieces.remove(coordinator.pieceOfTile(piece.x, piece.y + dy));
               }
+            }
 
             // Меняем цвет активного игрока
             activePlayerColor = activePlayerColor == PlayerColor.white
@@ -148,5 +161,74 @@ class HomeScreenState extends State<HomeScreen> {
         child: child,
       );
     }
+    return null;
+  }
+
+  void _showSimpleDialog(ChessPiece piece, ChessPiece? capturedPiece) {
+     showDialog (
+        context: context,
+        builder: (context) {
+          return SimpleDialog(
+            title: const Text('Chose your piece'),
+            children: <Widget>[
+              SimpleDialogOption(
+                onPressed: () {
+                  _onPressedBehaviour(piece, capturedPiece, 'bishop');
+                },
+                child: _buildChildForSimpleDialog(piece, 'bishop')
+              ),
+              SimpleDialogOption(
+                onPressed: () {
+                  _onPressedBehaviour(piece, capturedPiece, 'knight');
+                },
+                child: _buildChildForSimpleDialog(piece, 'knight')
+              ),
+              SimpleDialogOption(
+                onPressed: () {
+                  _onPressedBehaviour(piece, capturedPiece, 'rook');
+                  },
+                child: _buildChildForSimpleDialog(piece, 'rook')
+              ),
+              SimpleDialogOption(
+                onPressed: () {
+                  _onPressedBehaviour(piece, capturedPiece, 'queen');
+                  },
+                child: _buildChildForSimpleDialog(piece, 'queen')
+              ),
+            ],
+          );
+        });
+
+  }
+
+  Image _buildChildForSimpleDialog(ChessPiece piece, String pickedChessPiece, [double widthCoefficient = 0.8, double heightCoefficient = 0.8]) {
+    return Image.asset(
+      'assets/${piece.playerColor == PlayerColor.white ? 'white' : 'black'}_$pickedChessPiece.png',
+      height: tileWidth * widthCoefficient,
+      width: tileWidth * heightCoefficient,
+    );
+  }
+
+  void _onPressedBehaviour(ChessPiece piece, ChessPiece? capturedPiece, String pickedChessPiece) {
+    Navigator.pop(context, 'queen');
+    setState(() {
+      if (capturedPiece != null) {
+        pieces.remove(capturedPiece);
+      }
+
+      pieces.remove(piece);
+      if (pickedChessPiece == 'bishop') {
+        pieces.add(Bishop(piece.playerColor, piece.location));
+      }
+      else if (pickedChessPiece == 'knight') {
+        pieces.add(Knight(piece.playerColor, piece.location));
+      }
+      else if (pickedChessPiece == 'rook') {
+        pieces.add(Rook(piece.playerColor, piece.location));
+      }
+      else {
+        pieces.add(Queen(piece.playerColor, piece.location));
+      }
+    });
   }
 }
