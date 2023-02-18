@@ -48,17 +48,19 @@ class Bishop extends ChessPiece {
 
   List<Location> _generateCapturesOnDiagonal(bool isUp, bool isRight, List<ChessPiece> pieces) {
     bool hasFoundCapture = false;
+    bool obstructed = false;
 
     var list = List<Location?>.generate(8, (i) {
       if (hasFoundCapture) return null;
+      if (obstructed) return null;
 
       int dx = (isRight ? 1: -1) * i;
       int dy = (isUp ? 1 : -1) * i;
 
       final destination = Location(x + dx, y + dy);
 
-      final pieceOnLocation =
-      pieces.any((piece) => piece.location == destination);
+      final friendlyPieceOnLocation =
+      pieces.any((piece) => piece.location == destination && piece.playerColor == playerColor);
 
       final enemyPieceOnLocation =
       pieces.any((piece) => piece.location == destination && piece.playerColor != playerColor);
@@ -68,8 +70,8 @@ class Bishop extends ChessPiece {
         return destination;
       }
 
-      if (pieceOnLocation) {
-        return null;
+      if (friendlyPieceOnLocation && location != destination) {
+        obstructed = true;
       }
 
       return null;

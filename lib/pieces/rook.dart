@@ -73,16 +73,18 @@ class Rook extends ChessPiece {
 
   List<Location> _generateCapturesOnHorizontal(bool isRight, List<ChessPiece> pieces) {
     bool hasFoundCapture = false;
+    bool obstructed = false;
 
     var list = List<Location?>.generate(8, (i) {
       if (hasFoundCapture) return null;
+      if (obstructed) return null;
 
       int dx = (isRight ? 1 : -1) * i;
 
       final destination = Location(x + dx, y);
 
-      final pieceOnLocation =
-      pieces.any((piece) => piece.location == destination);
+      final friendlyPieceOnLocation =
+      pieces.any((piece) => piece.location == destination && piece.playerColor == playerColor);
 
       final enemyPieceOnLocation =
       pieces.any((piece) => piece.location == destination && piece.playerColor != playerColor);
@@ -92,8 +94,8 @@ class Rook extends ChessPiece {
         return destination;
       }
 
-      if (pieceOnLocation) {
-        return null;
+      if (friendlyPieceOnLocation && location != destination) {
+        obstructed = true;
       }
 
       return null;
@@ -107,16 +109,18 @@ class Rook extends ChessPiece {
 
   List<Location> _generateCapturesOnVertical(bool isUp, List<ChessPiece> pieces) {
     bool hasFoundCapture = false;
+    bool obstructed = false;
 
     var list = List<Location?>.generate(8, (i) {
       if (hasFoundCapture) return null;
+      if (obstructed) return null;
 
       int dy = (isUp ? 1 : -1) * i;
 
       final destination = Location(x, y + dy);
 
-      final pieceOnLocation =
-      pieces.any((piece) => piece.location == destination);
+      final friendlyPieceOnLocation =
+      pieces.any((piece) => piece.location == destination && piece.playerColor == playerColor);
 
       final enemyPieceOnLocation =
       pieces.any((piece) => piece.location == destination && piece.playerColor != playerColor);
@@ -126,8 +130,8 @@ class Rook extends ChessPiece {
         return destination;
       }
 
-      if (pieceOnLocation) {
-        return null;
+      if (friendlyPieceOnLocation && location != destination) {
+        obstructed = true;
       }
 
       return null;
