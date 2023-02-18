@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:chess/game_coordinator.dart';
+import 'package:chess/pieces/king.dart';
 import 'package:chess/pieces/pawn.dart';
 import 'package:flutter/material.dart';
 import '../pieces/bishop.dart';
@@ -80,6 +83,28 @@ class HomeScreenState extends State<HomeScreen> {
                 {element.previousMoveIsTwoSquareMove = false;}
               }
             }
+
+            // Короткая рокировка
+            if (piece is King && piece.location.x == x - 2) {
+                var rook = coordinator.pieceOfTile(x + 1, y);
+                rook?.location = Location(x - 1, y);
+            }
+
+            // Длинная рокировка
+            if (piece is King && piece.location.x == x + 2) {
+              var rook = coordinator.pieceOfTile(x - 2, y);
+              rook?.location = Location(x + 1, y);
+            }
+
+            // Проверка на совершение взятия на проходе
+            if (piece is Pawn) {
+              int dy = activePlayerColor == PlayerColor.white ? -1 : 1;
+              int dx = x - piece.x;
+              if (coordinator.pieceOfTile(piece.x + dx, piece.y - dy) == null && dx != 0) {
+                pieces.remove(coordinator.pieceOfTile(piece.x + dx, piece.y));
+              }
+            }
+
             // Перемещение фигуры
             piece.location = Location(x, y);
 
@@ -90,6 +115,7 @@ class HomeScreenState extends State<HomeScreen> {
                     : PlayerColor.white;
                 return;
             }
+
             // Фигура сделала первый ход, нужно для рокировки и первого хода пешек
             piece.makeFirstMove = true;
 
@@ -98,19 +124,61 @@ class HomeScreenState extends State<HomeScreen> {
               pieces.remove(capturedPiece);
             }
 
-
-            // Проверка на совершение взятия на проходе
-            if (piece is Pawn) {
-              int dy = activePlayerColor == PlayerColor.white ? -1 : 1;
-              if (coordinator.pieceOfTile(piece.x, piece.y + dy) != null) {
-                pieces.remove(coordinator.pieceOfTile(piece.x, piece.y + dy));
-              }
-            }
-
             // Меняем цвет активного игрока
             activePlayerColor = activePlayerColor == PlayerColor.white
                 ? PlayerColor.black
                 : PlayerColor.white;
+
+            // Меняем цвет активного игрока
+            coordinator.currentTurn = coordinator.currentTurn == PlayerColor.white
+                ? PlayerColor.black
+                : PlayerColor.white;
+
+            final allCurrentPlayerPieces = coordinator.pieces.where((piece) => piece.playerColor == coordinator.currentTurn).toList();
+            var canDoMove = false;
+
+            for (var currentPlayerPiece in allCurrentPlayerPieces) {
+              var isCheck = true;
+              final initialLocation = Location(
+                  currentPlayerPiece.location.x, currentPlayerPiece.location.y);
+              for (var location in currentPlayerPiece.legalMoves(pieces)) {
+                if (coordinator.pieceOfTile(location.x, location.y) != currentPlayerPiece) {
+                  if (coordinator.pieceOfTile(location.x, location.y) != null &&
+                      coordinator.pieceOfTile(location.x, location.y) is King == false) {
+                    final capturedPiece = coordinator.pieceOfTile(location.x, location.y);
+                    coordinator.pieces.remove(coordinator.pieceOfTile(location.x, location.y));
+                    currentPlayerPiece.location = Location(location.x, location.y);
+                    if (coordinator.kingUnderCheck == false) {
+                      isCheck = false;
+                    }
+                    currentPlayerPiece.location = initialLocation;
+                    coordinator.pieces.add(capturedPiece as ChessPiece);
+                  }
+                  else {
+                    currentPlayerPiece.location = Location(location.x, location.y);
+                    if (coordinator.kingUnderCheck == false) {
+                      isCheck = false;
+                    }
+                    currentPlayerPiece.location = initialLocation;
+                  }
+                }
+                if (isCheck == false && coordinator.pieceOfTile(location.x, location.y) != currentPlayerPiece) {
+                  canDoMove = true;
+                  break;
+                }
+              }
+              if (canDoMove) {
+                break;
+              }
+            }
+            if (canDoMove == false) {
+              if (coordinator.kingUnderCheck) {
+                log("Мат!!!!!");
+              }
+              else {
+                log("Пат!!!!!");
+              }
+            }
           }
         });
       },
@@ -122,7 +190,30 @@ class HomeScreenState extends State<HomeScreen> {
         final canMoveTo = piece.canMoveTo(x, y, pieces);
         final canCapture = piece.canCapture(x, y, pieces, previousMoveIsTwoSquarePawnMove);
 
-        return  (canMoveTo || canCapture) && piece.location != Location(x, y);
+        var isCheck = true;
+        final initialLocation = Location (piece.location.x, piece.location.y);
+
+          if (coordinator.pieceOfTile(x, y) != piece) {
+            if (coordinator.pieceOfTile(x, y) != null && coordinator.pieceOfTile(x, y) is King == false) {
+              final capturedPiece = coordinator.pieceOfTile(x, y);
+              coordinator.pieces.remove(coordinator.pieceOfTile(x, y));
+              piece.location = Location(x, y);
+              if (coordinator.kingUnderCheck == false) {
+                isCheck = false;
+              }
+              piece.location = initialLocation;
+              coordinator.pieces.add(capturedPiece as ChessPiece);
+            }
+            else {
+              piece.location = Location(x, y);
+              if (coordinator.kingUnderCheck == false) {
+                isCheck = false;
+              }
+              piece.location = initialLocation;
+            }
+          }
+
+        return  (canMoveTo || canCapture) && piece.location != Location(x, y) && isCheck == false;
     },
       builder: (context, data, rejects) => Container(
         decoration: BoxDecoration(

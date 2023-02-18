@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:chess/pieces/bishop.dart';
 import 'package:chess/pieces/chess_piece.dart';
 import 'package:chess/pieces/king.dart';
@@ -15,10 +17,14 @@ class GameCoordinator {
 
   List<ChessPiece> pieces = [];
 
-  PlayerColor currentTurn = PlayerColor.white;
+  PlayerColor currentTurn;
 
+  ChessPiece get currentPlayerKing => pieces.where((piece) => piece is King && piece.playerColor == currentTurn).first;
+
+  bool get kingUnderCheck => pieces.any((piece) => piece.playerColor != currentTurn
+  && piece.canCapture(currentPlayerKing.x, currentPlayerKing.y, pieces));
   //GameCoordinator(this.whitePieces, this.blackPieces, this.pieces);
-  GameCoordinator(this.pieces);
+  GameCoordinator(this.pieces, this.currentTurn);
 
   ChessPiece? pieceOfTile(int x, int y) => pieces.firstWhereOrNull((p) => p.x == x && p.y == y);
 
@@ -65,7 +71,8 @@ class GameCoordinator {
           Pawn(PlayerColor.black, Location(5, 6)),
           Pawn(PlayerColor.black, Location(6, 6)),
           Pawn(PlayerColor.black, Location(7, 6)),
-        ]
+        ],
+      PlayerColor.white
     );
   }
 }

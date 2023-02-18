@@ -1,4 +1,6 @@
 import 'package:chess/pieces/chess_piece.dart';
+import 'package:chess/pieces/rook.dart';
+import 'package:collection/collection.dart';
 
 class King extends ChessPiece {
   King(
@@ -21,6 +23,52 @@ class King extends ChessPiece {
   String get name => "king";
 
   List<Location> _generateMoves(List<ChessPiece> pieces) {
+    var canDoShortCastle = false;
+    var canDoLongCastle = false;
+
+
+    if (makeFirstMove == false) {
+      var notMovedRooks = pieces.where((piece) => piece is Rook && piece.makeFirstMove == false && piece.playerColor == playerColor);
+      var locationsToCheckLongCastle = List<Location>.empty(growable: true);
+      var locationsToCheckShortCastle = List<Location>.empty(growable: true);
+
+      if (notMovedRooks.isNotEmpty) {
+        for (var rook in notMovedRooks) {
+          if (rook.x == 0) {
+            locationsToCheckLongCastle.add(Location(1, y));
+            locationsToCheckLongCastle.add(Location(2, y));
+            locationsToCheckLongCastle.add(Location(3, y));
+          }
+          else {
+            locationsToCheckShortCastle.add(Location(5, y));
+            locationsToCheckShortCastle.add(Location(6, y));
+          }
+        }
+
+        var enemyPieces = pieces.where((piece) => piece.playerColor != playerColor && piece is King == false).toList();
+
+        if (enemyPieces.any((piece) => piece.canCapture(x, y, pieces)) == false) {
+          canDoShortCastle = true;
+          canDoLongCastle = true;
+        }
+        
+        for (var currentLocation in locationsToCheckShortCastle) {
+          if (pieces.any((piece) => piece.location == currentLocation)
+              || enemyPieces.any((piece) => piece.canMoveTo(currentLocation.x, currentLocation.y, pieces))
+              || enemyPieces.any((piece) => piece.canCapture(currentLocation.x, currentLocation.y, pieces))) {
+            canDoShortCastle = false;
+          }
+        }
+
+        for (var currentLocation in locationsToCheckLongCastle) {
+          if (pieces.any((piece) => piece.location == currentLocation)
+              || enemyPieces.any((piece) => piece.canMoveTo(currentLocation.x, currentLocation.y, pieces))
+              || enemyPieces.any((piece) => piece.canCapture(currentLocation.x, currentLocation.y, pieces))) {
+            canDoLongCastle = false;
+          }
+        }
+      }
+    }
 
     final destination1 = Location(x - 1, y);
     final pieceOnLocation1 = pieces.any((piece) => piece.location == destination1);
@@ -65,6 +113,13 @@ class King extends ChessPiece {
     list.add(tileLocation7);
     list.add(tileLocation8);
 
+    if (canDoShortCastle) {
+      list.add(Location(x + 2, y));
+    }
+
+    if (canDoLongCastle) {
+      list.add(Location(x - 2, y));
+    }
 
     var filteredList = list
         .whereType<Location>()
