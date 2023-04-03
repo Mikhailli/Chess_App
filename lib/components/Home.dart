@@ -1,3 +1,4 @@
+import 'package:chess/components/home_main_screen.dart';
 import 'package:chess/components/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
@@ -12,7 +13,7 @@ class Home extends StatefulWidget {
 class HomeScr extends State<Home>{
   int index = 0;
   final screens = [
-    const HomeScreen(),
+    const HomeMainScreen(),
     const HomeScreen(),
     const HomeScreen(),
     const HomeScreen(),
