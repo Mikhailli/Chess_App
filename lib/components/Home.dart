@@ -1,3 +1,4 @@
+import 'package:chess/components/home_game_screen.dart';
 import 'package:chess/components/home_main_screen.dart';
 import 'package:chess/components/home_screen.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +15,7 @@ class HomeScr extends State<Home>{
   int index = 0;
   final screens = [
     const HomeMainScreen(),
-    const HomeScreen(),
+    const HomeGameScreen(),
     const HomeScreen(),
     const HomeScreen(),
   ];
