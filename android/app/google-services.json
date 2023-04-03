@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "957600914253",
+    "project_id": "eazychess",
+    "storage_bucket": "eazychess.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:957600914253:android:e43468e291a5ed625a3504",
+        "android_client_info": {
+          "package_name": "com.example.chess"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "957600914253-hnant8h3ctuk4eqla8f42uieo0e112gm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCiKYv-EDl0PPBPpNtG6wuF7_zZxMIjFjQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "957600914253-hnant8h3ctuk4eqla8f42uieo0e112gm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

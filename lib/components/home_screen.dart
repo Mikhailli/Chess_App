@@ -34,9 +34,7 @@ class HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('chess'),
-      ),
+
       body: Column (
         children: [
           const Spacer(),
