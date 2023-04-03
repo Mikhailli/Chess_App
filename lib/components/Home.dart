@@ -20,10 +20,10 @@ class HomeScr extends State<Home>{
   Widget build(BuildContext context) {
 
     final items = <Widget>[
-      Icon(Icons.ice_skating, size: 30,),
-      Icon(Icons.ice_skating, size: 30,),
-      Icon(Icons.ice_skating, size: 30,),
-      Icon(Icons.ice_skating, size: 30,)
+      Icon(Icons.home_filled, size: 30,),
+      Icon(Icons.gamepad_rounded, size: 30,),
+      Icon(Icons.book, size: 30,),
+      Icon(Icons.settings, size: 30,)
     ];
 
     return Scaffold(
