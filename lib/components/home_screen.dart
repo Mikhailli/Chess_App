@@ -1,9 +1,10 @@
 import 'dart:developer';
-
 import 'package:chess/game_coordinator.dart';
 import 'package:chess/pieces/king.dart';
 import 'package:chess/pieces/pawn.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../pieces/bishop.dart';
 import '../pieces/chess_piece.dart';
 import '../pieces/knight.dart';
@@ -30,20 +31,42 @@ class HomeScreenState extends State<HomeScreen> {
   GameCoordinator coordinator = GameCoordinator.newGame();
 
   List<ChessPiece> get pieces => coordinator.pieces;
-
+  Future<bool?> showWarning (BuildContext context) async => showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Вы правда хотите выйти из игры?\nПроцесс не будет сохранен.'),
+        actions: [ElevatedButton(onPressed:() => Navigator.pop(context, false), child: const Text('Нет')),
+                  ElevatedButton(onPressed: () => Navigator.pop(context, true), child: const Text('Да'))],
+      ));
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-
-      body: Column (
-        children: [
-          const Spacer(),
-          buildBoard(),
-          const Spacer(),
-        ],
-      ),
-    );
+    return WillPopScope(
+      onWillPop: () async {
+        if (kDebugMode) {
+          print('Действие назад зафиксировано');
+        }
+        final shouldPop = await showWarning(context);
+        return shouldPop ?? false;
+      },
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+            backgroundColor: Colors.greenAccent,
+            title: const Text('♜EazyChess♜'),
+            leading: const BackButton(),
+      elevation: 0,
+      centerTitle: true,
+    ),
+    body: Column (
+    children: [
+    const Spacer(),
+    buildBoard(),
+    const Spacer(),
+    ],
+    ),
+    ));
   }
+
 
   Column buildBoard() {
     return Column(
@@ -320,4 +343,5 @@ class HomeScreenState extends State<HomeScreen> {
       }
     });
   }
+
 }
