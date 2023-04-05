@@ -15,7 +15,7 @@ import 'home_settings_screen.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 
 class ChessPuzzle extends StatefulWidget {
-  const ChessPuzzle(int number, {super.key});
+  const ChessPuzzle({super.key});
 
   @override
   State<StatefulWidget> createState() => ChessPuzzleState();

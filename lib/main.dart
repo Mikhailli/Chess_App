@@ -61,7 +61,7 @@ class MyApp extends StatelessWidget {
         'chess_puzzles_screen': (context) => ChessPuzzlesScreen(),
         'home_game_screen': (context) => HomeGameScreen(),
         'mates_in_one_screen': (context) => MatesInOneScreen(),
-        'chess_puzzles' : (context) => ChessPuzzle(t),
+        'chess_puzzles' : (context) => ChessPuzzle(),
       },
 
     );
