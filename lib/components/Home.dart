@@ -1,3 +1,4 @@
+import 'package:chess/components/home_edu_screen.dart';
 import 'package:chess/components/home_game_screen.dart';
 import 'package:chess/components/home_main_screen.dart';
 import 'package:chess/components/home_screen.dart';
@@ -16,7 +17,7 @@ class HomeScr extends State<Home>{
   final screens = [
     const HomeMainScreen(),
     const HomeGameScreen(),
-    const HomeScreen(),
+    const HomeEduScreen(),
     const HomeScreen(),
   ];
   Widget build(BuildContext context) {
@@ -28,7 +29,7 @@ class HomeScr extends State<Home>{
       Icon(Icons.settings, size: 30,)
     ];
 
-    return Scaffold(
+    return SafeArea(child: Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.greenAccent,
@@ -47,7 +48,7 @@ class HomeScr extends State<Home>{
         index: index,
         onTap: (index) => setState (() => this.index = index),
       ),
-    );
+    ));
   }
 
 }

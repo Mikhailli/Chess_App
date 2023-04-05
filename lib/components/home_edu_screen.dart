@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'rounded_button.dart';
 
-class HomeGameScreen extends StatefulWidget {
-  const HomeGameScreen({Key? key}) : super(key: key);
+class HomeEduScreen extends StatefulWidget {
+  const HomeEduScreen({Key? key}) : super(key: key);
 
   @override
-  State<HomeGameScreen> createState() => _HomeGameScreenState();
+  State<HomeEduScreen> createState() => _HomeEduScreenState();
 }
 
-class _HomeGameScreenState extends State<HomeGameScreen> {
+class _HomeEduScreenState extends State<HomeEduScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,23 +20,23 @@ class _HomeGameScreenState extends State<HomeGameScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 RoundedButton(
+                  colour: Colors.lightBlueAccent,
+                  title: ' 📚 Уроки',
+                  onPressed: () {
+                    Navigator.pushNamed(context, '');
+                  },
+                ),
+                RoundedButton(
                     colour: Colors.blueAccent,
-                    title: '🤖 Игра с ботом',
-
+                    title: '🏰 Дебюты',
                     onPressed: () {
                       Navigator.pushNamed(context, '');
                     }),
                 RoundedButton(
                     colour: Colors.blueAccent,
-                    title: '👱‍♂️ Игра с человеком',
+                    title: '♟️Эндшпиль',
                     onPressed: () {
                       Navigator.pushNamed(context, '');
-                    }),
-                RoundedButton(
-                    colour: Colors.blueAccent,
-                    title: '🧑‍🤝‍🧑 Игра с самим собой',
-                    onPressed: () {
-                      Navigator.pushNamed(context, 'home_screen');
                     }),
               ]),
         ));
