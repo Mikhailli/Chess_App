@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'rounded_button.dart';
 
@@ -20,41 +21,48 @@ class _HomeSettingsScreenState extends State<HomeSettingsScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 Card(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      const ListTile(
-                        leading: Icon(Icons.male),//Аватарка
-                      )
-                    ],
+                  child: InkWell(
+                    splashColor: Colors.blue.withAlpha(30),
+                    onTap: (){
+                      Navigator.pushNamed(context, 'profile');
+                    },
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        ListTile(
+                          leading: const Icon(Icons.male),//Аватарка
+                          title: Text(FirebaseAuth.instance.currentUser?.email == null ? FirebaseAuth.instance.currentUser.email : "Вы не залогинены")
+                        )
+                      ],
+                    ),
                   ),),
                 RoundedButton(
-                    colour: Colors.blueAccent,
+                    colour: Colors.blue.shade600,
                     title: '⚙️ Настройки',
                     onPressed: () {
                       Navigator.pushNamed(context, '');
                     }),
                 RoundedButton(
-                    colour: Colors.blueAccent,
+                    colour: Colors.blue.shade600,
                     title: '🤝 Друзья',
                     onPressed: () {
                       Navigator.pushNamed(context, '');
                     }),
                 RoundedButton(
-                    colour: Colors.blueAccent,
+                    colour: Colors.blue.shade600,
                     title: '✍️Сообщения',
                     onPressed: () {
                       Navigator.pushNamed(context, 'home_screen');
                     }),
                 RoundedButton(
-                    colour: Colors.blueAccent,
+                    colour: Colors.blue.shade600,
 
                     title: '⚒️Сообщить о проблеме',
                     onPressed: () {
                       Navigator.pushNamed(context, '');
                     }),
                 RoundedButton(
-                    colour: Colors.blueAccent,
+                    colour: Colors.blue.shade600,
                     title: '❗ Помощь',
                     onPressed: () {
                       Navigator.pushNamed(context, '');

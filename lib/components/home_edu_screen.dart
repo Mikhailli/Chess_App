@@ -20,20 +20,20 @@ class _HomeEduScreenState extends State<HomeEduScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 RoundedButton(
-                  colour: Colors.lightBlueAccent,
+                  colour: Colors.blue.shade600,
                   title: ' 📚 Уроки',
                   onPressed: () {
                     Navigator.pushNamed(context, '');
                   },
                 ),
                 RoundedButton(
-                    colour: Colors.blueAccent,
+                    colour: Colors.blue.shade600,
                     title: '🏰 Дебюты',
                     onPressed: () {
                       Navigator.pushNamed(context, '');
                     }),
                 RoundedButton(
-                    colour: Colors.blueAccent,
+                    colour: Colors.blue.shade600,
                     title: '♟️Эндшпиль',
                     onPressed: () {
                       Navigator.pushNamed(context, '');

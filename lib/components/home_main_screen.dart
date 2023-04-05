@@ -20,20 +20,20 @@ class _HomeMainScreenState extends State<HomeMainScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 RoundedButton(
-                  colour: Colors.lightBlueAccent,
+                  colour: Colors.blue.shade600,
                   title: '📖 Обучение',
                   onPressed: () {
                     Navigator.pushNamed(context, '');
                   },
                 ),
                 RoundedButton(
-                    colour: Colors.blueAccent,
+                    colour: Colors.blue.shade600,
                     title: '🤖 Игра с ботом',
                     onPressed: () {
                       Navigator.pushNamed(context, '');
                     }),
                 RoundedButton(
-                    colour: Colors.blueAccent,
+                    colour: Colors.blue.shade600,
                     title: '🏆 Рейтинговая таблица',
                     onPressed: () {
                       Navigator.pushNamed(context, '');

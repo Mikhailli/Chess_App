@@ -1,6 +1,7 @@
 import 'package:chess/components/auth_screen.dart';
 import 'package:chess/components/home_screen.dart';
 import 'package:chess/components/home.dart';
+import 'package:chess/components/profile_screen.dart';
 import 'package:chess/components/registration_screen.dart';
 import 'package:chess/components/login_screen.dart';
 import 'package:chess/components/welcome_screen.dart';
@@ -50,7 +51,8 @@ class MyApp extends StatelessWidget {
         'login_screen': (context) => LoginScreen(),
         'home_screen': (context) => HomeScreen(),
         'home': (context) => Home(),
-        'auth': (context) => auth_screen()
+        'auth': (context) => auth_screen(),
+        'profile': (context) => ProfileScreen()
       },
 
     );
