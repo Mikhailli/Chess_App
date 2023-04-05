@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   Future getCurrentUser() async {
-    User user = await FirebaseAuth.instance.currentUser;
+    User user = FirebaseAuth.instance.currentUser;
     if (kDebugMode) {
       print("User: ${user.email ?? "None"}");
     }
@@ -51,17 +51,17 @@ class MyApp extends StatelessWidget {
 
       initialRoute: 'auth',
       routes: {
-        'welcome_screen': (context) => WelcomeScreen(),
-        'registration_screen': (context) => RegistrationScreen(),
-        'login_screen': (context) => LoginScreen(),
-        'home_screen': (context) => HomeScreen(),
-        'home': (context) => Home(),
-        'auth': (context) => auth_screen(),
-        'profile': (context) => ProfileScreen(),
-        'chess_puzzles_screen': (context) => ChessPuzzlesScreen(),
-        'home_game_screen': (context) => HomeGameScreen(),
-        'mates_in_one_screen': (context) => MatesInOneScreen(),
-        'chess_puzzles' : (context) => ChessPuzzle(),
+        'welcome_screen': (context) => const WelcomeScreen(),
+        'registration_screen': (context) => const RegistrationScreen(),
+        'login_screen': (context) => const LoginScreen(),
+        'home_screen': (context) => const HomeScreen(),
+        'home': (context) => const Home(),
+        'auth': (context) => const AuthScreen(),
+        'profile': (context) => const ProfileScreen(),
+        'chess_puzzles_screen': (context) => const ChessPuzzlesScreen(),
+        'home_game_screen': (context) => const HomeGameScreen(),
+        'mates_in_one_screen': (context) => const MatesInOneScreen(),
+        'chess_puzzles' : (context) => const ChessPuzzle(),
       },
 
     );

@@ -245,11 +245,11 @@ class ChessPuzzleState extends State<ChessPuzzle> {
                   showDialog(
                       context: context,
                       builder: (_) =>  AlertDialog(
-                        title: Text('Задача решена'),
-                        content: Text('Хотите перейти к следующей задаче'),
+                        title: const Text('Задача решена'),
+                        content: const Text('Хотите перейти к следующей задаче'),
                         actions: <Widget>[
                           TextButton(
-                            child: Text('ОК'),
+                            child: const Text('ОК'),
                             onPressed: () { Navigator.of(context).pop();},
                           ),],
                       )

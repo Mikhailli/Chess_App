@@ -4,14 +4,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'Home.dart';
 
-class auth_screen extends StatefulWidget {
-  const auth_screen({Key? key}) : super(key: key);
+class AuthScreen extends StatefulWidget {
+  const AuthScreen({Key? key}) : super(key: key);
 
   @override
-  State<auth_screen> createState() => _auth_screenState();
+  State<AuthScreen> createState() => _AuthScreenState();
 }
 
-class _auth_screenState extends State<auth_screen> {
+class _AuthScreenState extends State<AuthScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,15 +19,15 @@ class _auth_screenState extends State<auth_screen> {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasData) { // Пользователь залогинен
             if (kDebugMode) {
               print('login in');
             }
-            return Home();
+            return const Home();
           }
           else {
-            return WelcomeScreen();
+            return const WelcomeScreen();
           }
         },
       ),

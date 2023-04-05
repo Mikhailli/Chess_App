@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'rounded_button.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +23,8 @@ const kTextFieldDecoration = InputDecoration(
     ));
 
 class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
@@ -54,7 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   decoration: kTextFieldDecoration.copyWith(
                     hintText: 'Enter your email',
                   )),
-              SizedBox(
+              const SizedBox(
                 height: 8.0,
               ),
               TextField(
@@ -66,7 +69,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   },
                   decoration: kTextFieldDecoration.copyWith(
                       hintText: 'Enter your password.')),
-              SizedBox(
+              const SizedBox(
                 height: 24.0,
               ),
               RoundedButton(
@@ -83,7 +86,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         Navigator.pushNamed(context, 'home');
                       }
                     } catch (e) {
-                      print(e);
+                      if (kDebugMode) {
+                        print(e);
+                      }
                     }
                     setState(() {
                       showSpinner = false;
