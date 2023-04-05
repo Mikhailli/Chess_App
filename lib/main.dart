@@ -1,4 +1,7 @@
 import 'package:chess/components/auth_screen.dart';
+import 'package:chess/components/chess_puzzles.dart';
+import 'package:chess/components/chess_puzzles_screen.dart';
+import 'package:chess/components/home_game_screen.dart';
 import 'package:chess/components/home_screen.dart';
 import 'package:chess/components/home.dart';
 import 'package:chess/components/profile_screen.dart';
@@ -10,6 +13,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+import 'components/mates_in_one_screen.dart';
 
 void main() async {
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
@@ -52,7 +57,11 @@ class MyApp extends StatelessWidget {
         'home_screen': (context) => HomeScreen(),
         'home': (context) => Home(),
         'auth': (context) => auth_screen(),
-        'profile': (context) => ProfileScreen()
+        'profile': (context) => ProfileScreen(),
+        'chess_puzzles_screen': (context) => ChessPuzzlesScreen(),
+        'home_game_screen': (context) => HomeGameScreen(),
+        'mates_in_one_screen': (context) => MatesInOneScreen(),
+        'chess_puzzles' : (context) => ChessPuzzle(t),
       },
 
     );

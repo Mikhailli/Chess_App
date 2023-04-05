@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:chess/pieces/bishop.dart';
 import 'package:chess/pieces/chess_piece.dart';
 import 'package:chess/pieces/king.dart';
@@ -74,5 +72,30 @@ class GameCoordinator {
         ],
       PlayerColor.white
     );
+  }
+
+  factory GameCoordinator.mateInOnePuzzle(int number) {
+    if (number == 1) {
+    return GameCoordinator(
+        [
+          Knight(PlayerColor.white, Location(2, 5)),
+          Bishop(PlayerColor.white, Location(4, 1)),
+          King(PlayerColor.white, Location(1, 6)),
+          Pawn(PlayerColor.white, Location(3, 1)),
+          Rook(PlayerColor.black, Location(4, 7)),
+          Bishop(PlayerColor.black, Location(3, 5)),
+          Bishop(PlayerColor.black, Location(3, 4)),
+          King(PlayerColor.black, Location(2, 4)),
+          Pawn(PlayerColor.black, Location(1, 2)),
+          Pawn(PlayerColor.black, Location(5, 5)),
+        ],
+        PlayerColor.white
+    );}
+    return GameCoordinator.newGame();
+  }
+
+  factory GameCoordinator.empty()
+  {
+    return GameCoordinator([], PlayerColor.white);
   }
 }

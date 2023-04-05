@@ -28,9 +28,9 @@ class _HomeEduScreenState extends State<HomeEduScreen> {
                 ),
                 RoundedButton(
                     colour: Colors.blue.shade600,
-                    title: '🏰 Дебюты',
+                    title: '🏰 Задачи',
                     onPressed: () {
-                      Navigator.pushNamed(context, '');
+                      Navigator.pushNamed(context, 'chess_puzzles_screen');
                     }),
                 RoundedButton(
                     colour: Colors.blue.shade600,
