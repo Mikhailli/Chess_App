@@ -7,6 +7,7 @@ import 'package:chess/components/home.dart';
 import 'package:chess/components/profile_screen.dart';
 import 'package:chess/components/registration_screen.dart';
 import 'package:chess/components/login_screen.dart';
+import 'package:chess/components/reset_password_screen.dart';
 import 'package:chess/components/welcome_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -62,6 +63,7 @@ class MyApp extends StatelessWidget {
         'home_game_screen': (context) => const HomeGameScreen(),
         'mates_in_one_screen': (context) => const MatesInOneScreen(),
         'chess_puzzles' : (context) => const ChessPuzzle(),
+        'reset_password' : (context) => const ResetPassword()
       },
 
     );

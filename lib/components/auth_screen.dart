@@ -1,4 +1,4 @@
-import 'package:chess/components/welcome_screen.dart';
+import 'package:chess/components/login_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -22,12 +22,12 @@ class _AuthScreenState extends State<AuthScreen> {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasData) { // Пользователь залогинен
             if (kDebugMode) {
-              print('login in');
+              print('Авторизация');
             }
             return const Home();
           }
           else {
-            return const WelcomeScreen();
+            return const LoginScreen();
           }
         },
       ),

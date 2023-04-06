@@ -4,6 +4,7 @@ import 'package:chess/pieces/king.dart';
 import 'package:chess/pieces/pawn.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../pieces/bishop.dart';
 import '../pieces/chess_piece.dart';
 import '../pieces/knight.dart';
@@ -39,6 +40,10 @@ class HomeScreenState extends State<HomeScreen> {
       ));
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     return WillPopScope(
       onWillPop: () async {
         if (kDebugMode) {
