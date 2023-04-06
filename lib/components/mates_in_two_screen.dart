@@ -6,14 +6,14 @@ import 'home_settings_screen.dart';
 import 'rounded_button.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 
-class ChessPuzzlesScreen extends StatefulWidget {
-  const ChessPuzzlesScreen({super.key});
+class MatesInTwoScreen extends StatefulWidget {
+  const MatesInTwoScreen({super.key});
 
   @override
-  State<ChessPuzzlesScreen> createState() => _ChessPuzzlesScreenState();
+  State<MatesInTwoScreen> createState() => _MatesInTwoScreenState();
 }
 
-class _ChessPuzzlesScreenState extends State<ChessPuzzlesScreen> {
+class _MatesInTwoScreenState extends State<MatesInTwoScreen> {
   int check = -1;
   int index = 2;
   final screens = [
@@ -33,7 +33,7 @@ class _ChessPuzzlesScreenState extends State<ChessPuzzlesScreen> {
     ];
 
     if (check == -1) {
-    return Scaffold(
+      return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
             automaticallyImplyLeading: false,
@@ -51,38 +51,39 @@ class _ChessPuzzlesScreenState extends State<ChessPuzzlesScreen> {
               children: <Widget>[
                 RoundedButton(
                   colour: Colors.blue.shade600,
-                  title: 'Мат в 1 ход',
+                  title: 'Задача №1',
                   onPressed: () {
-                    Navigator.pushNamed(context, 'mates_in_one_screen');
+                    Navigator.pushNamed(context, 'chess_puzzles', arguments: [2, 1]);
                   },
                 ),
                 RoundedButton(
                     colour: Colors.blue.shade600,
-                    title: 'Мат в 2 хода',
+                    title: 'Задача №2',
                     onPressed: () {
-                      Navigator.pushNamed(context, 'mates_in_two_screen');
+                      Navigator.pushNamed(context, 'chess_puzzles', arguments: [2, 2]);
                     }),
                 RoundedButton(
                     colour: Colors.blue.shade600,
-                    title: 'Мат в 3 хода',
+                    title: 'Задача №3',
                     onPressed: () {
-                      Navigator.pushNamed(context, 'mates_in_three_screen');
+                      Navigator.pushNamed(context, 'chess_puzzles', arguments: [2, 3]);
                     }),
               ]),
         ),
-      bottomNavigationBar: CurvedNavigationBar (
-        backgroundColor: Colors.transparent,
-        buttonBackgroundColor: Colors.white,
-        animationDuration: const Duration(milliseconds: 300),
-        items: items,
-        color: Colors.greenAccent,
-        height: 60,
-        index: index,
-        onTap: (index) => setState (() => {
-          this.index = index,
-          check = 0
-        }),
-      ),);}
+        bottomNavigationBar: CurvedNavigationBar (
+          backgroundColor: Colors.transparent,
+          buttonBackgroundColor: Colors.white,
+          animationDuration: const Duration(milliseconds: 300),
+          items: items,
+          color: Colors.greenAccent,
+          height: 60,
+          index: index,
+          onTap: (index) => setState (() => {
+            this.index = index,
+            check = 0
+          }),
+        ),);
+    }
     else {
       return Scaffold(
         backgroundColor: Colors.white,

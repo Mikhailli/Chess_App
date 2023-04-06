@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 import 'package:chess/game_coordinator.dart';
 import 'package:chess/pieces/king.dart';
@@ -13,6 +14,14 @@ import 'home_game_screen.dart';
 import 'home_main_screen.dart';
 import 'home_settings_screen.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:tuple/tuple.dart';
+
+class CustomAlertDialogShape extends RoundedRectangleBorder {
+  final double radius;
+
+  const CustomAlertDialogShape(this.radius);
+
+}
 
 class ChessPuzzle extends StatefulWidget {
   const ChessPuzzle({super.key});
@@ -39,6 +48,9 @@ class ChessPuzzleState extends State<ChessPuzzle> {
 
   var activePlayerColor = PlayerColor.white;
   var previousMoveIsTwoSquarePawnMove = false;
+  var numberOfPuzzle = 0;
+  var movesCount = 0;
+  var countOfMakedMove = 0;
 
   GameCoordinator coordinator = GameCoordinator.empty();
 
@@ -46,10 +58,13 @@ class ChessPuzzleState extends State<ChessPuzzle> {
 
   @override
   Widget build(BuildContext context) {
-    final number = ModalRoute.of(context)?.settings.arguments as int;
+    final arguments = ModalRoute.of(context)?.settings.arguments as List<int>;
+    numberOfPuzzle = arguments[1];
+    movesCount = arguments[0];
+
 
     if (coordinator.pieces.isEmpty) {
-      coordinator = GameCoordinator.mateInOnePuzzle(number);
+      coordinator = GameCoordinator.getPuzzle(numberOfPuzzle, movesCount);
     }
     final items = <Widget>[
       const Icon(Icons.home_filled, size: 30,),
@@ -63,8 +78,8 @@ class ChessPuzzleState extends State<ChessPuzzle> {
           backgroundColor: Colors.white,
           appBar: AppBar(
             backgroundColor: Colors.greenAccent,
-            title: const Text('♜EazyChess♜'),
-            leading: const BackButton(),
+            title: const Text('♜EazyChess♜',style: TextStyle(fontSize: 24, color: Colors.black)),
+            leading: const BackButton(color: Colors.black),
             elevation: 0,
             centerTitle: true,
           ),
@@ -132,7 +147,7 @@ class ChessPuzzleState extends State<ChessPuzzle> {
     return DragTarget<ChessPiece>(
         onAccept: (piece) {
           final capturedPiece = coordinator.pieceOfTile(x, y);
-
+          final correctMoves = getCorrectMoves(movesCount, numberOfPuzzle);
           setState(() {
             if (activePlayerColor == piece.playerColor) {
 
@@ -174,93 +189,183 @@ class ChessPuzzleState extends State<ChessPuzzle> {
               }
 
               // Перемещение фигуры
+              var location = piece.location;
               piece.location = Location(x, y);
+              if (coordinator.pieceOfTile(correctMoves[countOfMakedMove].item1?.x as int, correctMoves[countOfMakedMove].item1?.y as int) != null
+              || coordinator.pieceOfTile(correctMoves[countOfMakedMove].item2?.x as int, correctMoves[countOfMakedMove].item2?.y as int) == null )
+                {
+                  piece.location = location;
+                }
+              else {
+                countOfMakedMove += 1;
 
-              if (piece is Pawn && (y == 0 || y == 7)) {
-                _showSimpleDialog(piece, capturedPiece);
+
+                if (piece is Pawn && (y == 0 || y == 7)) {
+                  _showSimpleDialog(piece, capturedPiece);
+                  activePlayerColor = activePlayerColor == PlayerColor.white
+                      ? PlayerColor.black
+                      : PlayerColor.white;
+                  return;
+                }
+
+                // Фигура сделала первый ход, нужно для рокировки и первого хода пешек
+                piece.makeFirstMove = true;
+
+                // Удаление срубленной фигуры
+                if (capturedPiece != null) {
+                  pieces.remove(capturedPiece);
+                }
+
+                // Меняем цвет активного игрока
                 activePlayerColor = activePlayerColor == PlayerColor.white
                     ? PlayerColor.black
                     : PlayerColor.white;
-                return;
-              }
 
-              // Фигура сделала первый ход, нужно для рокировки и первого хода пешек
-              piece.makeFirstMove = true;
+                // Меняем цвет активного игрока
+                coordinator.currentTurn =
+                coordinator.currentTurn == PlayerColor.white
+                    ? PlayerColor.black
+                    : PlayerColor.white;
 
-              // Удаление срубленной фигуры
-              if (capturedPiece != null) {
-                pieces.remove(capturedPiece);
-              }
-
-              // Меняем цвет активного игрока
-              activePlayerColor = activePlayerColor == PlayerColor.white
-                  ? PlayerColor.black
-                  : PlayerColor.white;
-
-              // Меняем цвет активного игрока
-              coordinator.currentTurn = coordinator.currentTurn == PlayerColor.white
-                  ? PlayerColor.black
-                  : PlayerColor.white;
-
-              final allCurrentPlayerPieces = coordinator.pieces.where((piece) => piece.playerColor == coordinator.currentTurn).toList();
-              var canDoMove = false;
-
-              for (var currentPlayerPiece in allCurrentPlayerPieces) {
-                var isCheck = true;
-                final initialLocation = Location(
-                    currentPlayerPiece.location.x, currentPlayerPiece.location.y);
-                for (var location in currentPlayerPiece.legalMoves(pieces)) {
-                  if (coordinator.pieceOfTile(location.x, location.y) != currentPlayerPiece) {
-                    if (coordinator.pieceOfTile(location.x, location.y) != null &&
-                        coordinator.pieceOfTile(location.x, location.y) is King == false) {
-                      final capturedPiece = coordinator.pieceOfTile(location.x, location.y);
-                      coordinator.pieces.remove(coordinator.pieceOfTile(location.x, location.y));
-                      currentPlayerPiece.location = Location(location.x, location.y);
-                      if (coordinator.kingUnderCheck == false) {
-                        isCheck = false;
+                if (activePlayerColor == PlayerColor.black &&
+                    countOfMakedMove != 0 && correctMoves.length >= countOfMakedMove + 1 &&
+                    correctMoves[countOfMakedMove - 1].item3 != null) {
+                  var piece = coordinator.pieceOfTile(correctMoves[countOfMakedMove - 1].item3?.x as int, correctMoves[countOfMakedMove - 1].item3?.y as int);
+                  Timer(const Duration(milliseconds: 300), () {
+                    setState((){
+                      var capturedPiece = coordinator.pieceOfTile(correctMoves[countOfMakedMove - 1].item4?.x as int, correctMoves[countOfMakedMove - 1].item4?.y as int);
+                      if (capturedPiece != null) {
+                        coordinator.pieces.remove(capturedPiece);
                       }
-                      currentPlayerPiece.location = initialLocation;
-                      coordinator.pieces.add(capturedPiece as ChessPiece);
+                    piece?.location = Location(correctMoves[countOfMakedMove - 1].item4?.x as int, correctMoves[countOfMakedMove - 1].item4?.y as int);
+
+                  activePlayerColor = PlayerColor.white;
+                  coordinator.currentTurn = PlayerColor.white;});
+
+                  });
+                }
+
+                final allCurrentPlayerPieces = coordinator.pieces.where((
+                    piece) =>
+                piece.playerColor == coordinator.currentTurn)
+                    .toList();
+                var canDoMove = false;
+
+                for (var currentPlayerPiece in allCurrentPlayerPieces) {
+                  var isCheck = true;
+                  final initialLocation = Location(
+                      currentPlayerPiece.location.x,
+                      currentPlayerPiece.location.y);
+                  for (var location in currentPlayerPiece.legalMoves(pieces)) {
+                    if (coordinator.pieceOfTile(location.x, location.y) !=
+                        currentPlayerPiece) {
+                      if (coordinator.pieceOfTile(location.x, location.y) !=
+                          null &&
+                          coordinator.pieceOfTile(
+                              location.x, location.y) is King == false) {
+                        final capturedPiece = coordinator.pieceOfTile(
+                            location.x, location.y);
+                        coordinator.pieces.remove(
+                            coordinator.pieceOfTile(location.x, location.y));
+                        currentPlayerPiece.location =
+                            Location(location.x, location.y);
+                        if (coordinator.kingUnderCheck == false) {
+                          isCheck = false;
+                        }
+                        currentPlayerPiece.location = initialLocation;
+                        coordinator.pieces.add(capturedPiece as ChessPiece);
+                      }
+                      else {
+                        currentPlayerPiece.location =
+                            Location(location.x, location.y);
+                        if (coordinator.kingUnderCheck == false) {
+                          isCheck = false;
+                        }
+                        currentPlayerPiece.location = initialLocation;
+                      }
                     }
-                    else {
-                      currentPlayerPiece.location = Location(location.x, location.y);
-                      if (coordinator.kingUnderCheck == false) {
-                        isCheck = false;
-                      }
-                      currentPlayerPiece.location = initialLocation;
+                    if (isCheck == false &&
+                        coordinator.pieceOfTile(location.x, location.y) !=
+                            currentPlayerPiece) {
+                      canDoMove = true;
+                      break;
                     }
                   }
-                  if (isCheck == false && coordinator.pieceOfTile(location.x, location.y) != currentPlayerPiece) {
-                    canDoMove = true;
+                  if (canDoMove) {
                     break;
                   }
                 }
-                if (canDoMove) {
-                  break;
-                }
-              }
-              if (canDoMove == false) {
-                if (coordinator.kingUnderCheck) {
-                  log("Мат!!!!!");
-                  showDialog(
-                      context: context,
-                      builder: (_) =>  AlertDialog(
-                        title: const Text('Задача решена'),
-                        content: const Text('Хотите перейти к следующей задаче'),
-                        actions: <Widget>[
-                          TextButton(
-                            child: const Text('ОК'),
-                            onPressed: () { Navigator.of(context).pop();},
-                          ),],
-                      )
-                  );
-                }
+                if (canDoMove == false) {
+                  if (coordinator.kingUnderCheck) {
+                    log("Мат!!!!!");
+                    Timer(const Duration(milliseconds: 300), () {
+                    if (numberOfPuzzle != 3) {
+                    showDialog(
+                        context: context,
+                        builder: (_) =>
+                          AlertDialog(
+                            title: const Center(child: Text('Задача решена')),
+                            shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(32.0))),
+                            content: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children : const <Widget>[
+                                Expanded(
+                                  child: Text(
+                                    'Хотите перейти к следующей задаче?',
+                                    textAlign: TextAlign.justify,
+                                    style: TextStyle(
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                            actions: [ Row(mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,children: [
+                                Container( margin: const EdgeInsets.symmetric(horizontal: 20.0), child: ElevatedButton(onPressed:() => Navigator.pop(context), child: const Text('Нет'))),
+                                Container( margin: const EdgeInsets.symmetric(horizontal: 20.0),child: ElevatedButton(onPressed: () => Navigator.pushNamed(
+                                    context, 'chess_puzzles',
+                                    arguments: [movesCount, numberOfPuzzle + 1]), child: const Text('Да'))),
+                              ],)],
+                          )
+                    );}
+                    else {
+                      showDialog(
+                          context: context,
+                          builder: (_) =>
+                              AlertDialog(
+                                title: const Center(child: Text('Задача решена')),
+                                shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.all(Radius.circular(32.0))),
+                                content: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children : const <Widget>[
+                                    Expanded(
+                                      child: Text(
+                                        'Это последняя задача в данной категории. Хотите вернуться к выбору категории?',
+                                        textAlign: TextAlign.justify,
+                                        style: TextStyle(
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                actions: [ Row(mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,children: [
+                                  Container( margin: const EdgeInsets.symmetric(horizontal: 20.0), child: ElevatedButton(onPressed:() => Navigator.pop(context), child: const Text('Нет'))),
+                                  Container( margin: const EdgeInsets.symmetric(horizontal: 20.0),child: ElevatedButton(onPressed: () => Navigator.pushNamed(context, 'chess_puzzles_screen'), child: const Text('Да'))),
+                                ],)],
+                              ));
+                    }});
+                  }
 
-                else {
-                  log("Пат!!!!!");
+                  else {
+                    log("Пат!!!!!");
+                  }
                 }
-              }
-            }
+              }}
           });
         },
         onWillAccept: (piece) {
@@ -326,6 +431,16 @@ class ChessPuzzleState extends State<ChessPuzzle> {
             width: tileWidth * 0.8,
           )
       );
+      if (piece.playerColor == PlayerColor.black){
+        return Container (
+            alignment: Alignment.center,
+            child: Image.asset(
+              piece.fileName,
+              height: tileWidth * 0.8,
+              width: tileWidth * 0.8,
+            )
+        );
+      }
       return Draggable<ChessPiece> (
         data: piece,
         feedback: child,
@@ -404,4 +519,55 @@ class ChessPuzzleState extends State<ChessPuzzle> {
     });
   }
 
+  List<Tuple4<Location?, Location?, Location?, Location?>> getCorrectMoves(int movesCount, int number) {
+    if (movesCount == 1) {
+      if (number == 1) {
+        return [Tuple4(Location(3, 1), Location(3, 3), null, null)];
+      }
+      else if (number == 2) {
+        return [Tuple4(Location(4, 3), Location(3, 5), null, null)];
+      }
+      else if (number == 3) {
+        return [Tuple4(Location(2, 0), Location(6, 4), null, null)];
+      }
+    }
+    else if (movesCount == 2) {
+      if (number == 1) {
+        return
+          [Tuple4(Location(4, 7), Location(7, 4), Location(7, 7), Location(6, 7)),
+          Tuple4(Location(7, 4), Location(7, 6), null, null)];
+      }
+      else if (number == 2) {
+        return
+          [Tuple4(Location(3, 3), Location(5, 4), Location(6, 6), Location(6, 7)),
+          Tuple4(Location(7, 4), Location(7, 6), null, null)];
+      }
+      else if (number == 3) {
+        return
+          [Tuple4(Location(7, 3), Location(7, 6), Location(6, 7), Location(5, 7)),
+          Tuple4(Location(7, 6), Location(5, 6), null, null)];
+      }
+    }
+    else if (movesCount == 3) {
+      if (number == 1) {
+        return
+          [Tuple4(Location(5, 4), Location(7, 5), Location(6, 7), Location(7, 7)),
+            Tuple4(Location(7, 5), Location(5, 6), Location(7, 7), Location(6, 7)),
+            Tuple4(Location(0, 6), Location(6, 6), null, null)];
+      }
+      else if (number == 2) {
+        return
+          [Tuple4(Location(5, 4), Location(4, 5), Location(4, 6), Location(4, 5)),
+            Tuple4(Location(7, 5), Location(7, 6), Location(6, 7), Location(5, 7)),
+            Tuple4(Location(7, 6), Location(5, 6), null, null)];
+      }
+      else if (number == 3) {
+        return
+          [Tuple4(Location(3, 7), Location(5, 7), Location(6, 7), Location(7, 6)),
+            Tuple4(Location(5, 7), Location(5, 6), Location(7, 6), Location(7, 7)),
+            Tuple4(Location(3, 5), Location(4, 4), null, null)];
+      }
+    }
+    return [const Tuple4(null, null, null, null)];
+  }
 }

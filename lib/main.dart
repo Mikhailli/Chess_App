@@ -15,7 +15,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'components/mate_in_three_sceen.dart';
 import 'components/mates_in_one_screen.dart';
+import 'components/mates_in_two_screen.dart';
 
 void main() async {
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
@@ -62,6 +64,8 @@ class MyApp extends StatelessWidget {
         'chess_puzzles_screen': (context) => const ChessPuzzlesScreen(),
         'home_game_screen': (context) => const HomeGameScreen(),
         'mates_in_one_screen': (context) => const MatesInOneScreen(),
+        'mates_in_two_screen': (context) => const MatesInTwoScreen(),
+        'mates_in_three_screen': (context) => const MatesInThreeScreen(),
         'chess_puzzles' : (context) => const ChessPuzzle(),
         'reset_password' : (context) => const ResetPassword()
       },

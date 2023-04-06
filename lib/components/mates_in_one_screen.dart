@@ -40,7 +40,7 @@ class _MatesInOneScreenState extends State<MatesInOneScreen> {
           backgroundColor: Colors.greenAccent,
           title: const Text('♜EazyChess♜',style: TextStyle(fontSize: 24, color: Colors.black)),
           elevation: 0,
-          leading: const BackButton(),
+          leading: const BackButton(color: Colors.black),
           centerTitle: true
       ),
       body: Padding(
@@ -53,20 +53,20 @@ class _MatesInOneScreenState extends State<MatesInOneScreen> {
                 colour: Colors.blue.shade600,
                 title: 'Задача №1',
                 onPressed: () {
-                  Navigator.pushNamed(context, 'chess_puzzles', arguments: 1);
+                  Navigator.pushNamed(context, 'chess_puzzles', arguments: [1, 1]);
                 },
               ),
               RoundedButton(
                   colour: Colors.blue.shade600,
                   title: 'Задача №2',
                   onPressed: () {
-                    Navigator.pushNamed(context, '');
+                    Navigator.pushNamed(context, 'chess_puzzles', arguments: [1, 2]);
                   }),
               RoundedButton(
                   colour: Colors.blue.shade600,
                   title: 'Задача №3',
                   onPressed: () {
-                    Navigator.pushNamed(context, '');
+                    Navigator.pushNamed(context, 'chess_puzzles', arguments: [1, 3]);
                   }),
             ]),
       ),

@@ -34,9 +34,14 @@ class HomeScreenState extends State<HomeScreen> {
   Future<bool?> showWarning (BuildContext context) async => showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Вы правда хотите выйти из игры?\nПроцесс не будет сохранен.'),
-        actions: [ElevatedButton(onPressed:() => Navigator.pop(context, false), child: const Text('Нет')),
-                  ElevatedButton(onPressed: () => Navigator.pop(context, true), child: const Text('Да'))],
+        title: const Text('Вы правда хотите выйти из игры? Игра не будет сохранена.', textAlign: TextAlign.justify),
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(32.0))),
+        actions: [ Row(mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,children: [
+            Container( margin: const EdgeInsets.symmetric(horizontal: 20.0), child: ElevatedButton(onPressed:() => Navigator.pop(context, false), child: const Text('Нет'))),
+            Container( margin: const EdgeInsets.symmetric(horizontal: 20.0),child: ElevatedButton(onPressed: () => Navigator.pushNamed(context, 'home'), child: const Text('Да'))),
+          ],)],
       ));
   @override
   Widget build(BuildContext context) {
@@ -56,10 +61,10 @@ class HomeScreenState extends State<HomeScreen> {
         backgroundColor: Colors.white,
         appBar: AppBar(
             backgroundColor: Colors.greenAccent,
-            title: const Text('♜EazyChess♜'),
-            leading: const BackButton(),
-      elevation: 0,
-      centerTitle: true,
+            title: const Text('♜EazyChess♜',style: TextStyle(fontSize: 24, color: Colors.black)),
+            leading: const BackButton(color: Colors.black),
+            elevation: 0,
+            centerTitle: true,
     ),
     body: Column (
     children: [
@@ -199,9 +204,72 @@ class HomeScreenState extends State<HomeScreen> {
             if (canDoMove == false) {
               if (coordinator.kingUnderCheck) {
                 log("Мат!!!!!");
+                var message = coordinator.currentTurn == PlayerColor.black
+                    ? 'Победили белые.'
+                    : 'Победили черные.';
+                    showDialog(
+                        context: context,
+                        builder: (_) =>
+                            AlertDialog(
+                              title: const Center(child: Text('Партия окончена')),
+                              shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.all(Radius.circular(32.0))),
+                              content: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children : <Widget>[
+                                  Expanded(
+                                    child: Text(
+                                      "$message Хотите сыграть еще раз?",
+                                      textAlign: TextAlign.justify,
+                                      style: const TextStyle(
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              actions: [ Row(mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,children: [
+                                  Container( margin: const EdgeInsets.symmetric(horizontal: 20.0), child: ElevatedButton(onPressed:() => Navigator.pop(context), child: const Text('Нет'))),
+                                  Container( margin: const EdgeInsets.symmetric(horizontal: 20.0),child: ElevatedButton(onPressed: () => Navigator.pushNamed(
+                                      context, 'home_screen'),
+                                       child: const Text('Да'))),
+                                ],)],
+                            )
+                    );
               }
               else {
                 log("Пат!!!!!");
+                showDialog(
+                    context: context,
+                    builder: (_) =>
+                        AlertDialog(
+                          title: const Center(child: Text('Партия окончена')),
+                          shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(32.0))),
+                          content: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children : const <Widget>[
+                              Expanded(
+                                child: Text(
+                                  "Ничья. Хотите сыграть еще раз?",
+                                  textAlign: TextAlign.justify,
+                                  style: TextStyle(
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                          actions: [ Row(mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,children: [
+                              Container( margin: const EdgeInsets.symmetric(horizontal: 20.0), child: ElevatedButton(onPressed:() => Navigator.pop(context), child: const Text('Нет'))),
+                              Container( margin: const EdgeInsets.symmetric(horizontal: 20.0),child: ElevatedButton(onPressed: () => Navigator.pushNamed(
+                                  context, 'home_screen'),
+                                  child: const Text('Да'))),
+                            ],)],
+                        )
+                );
               }
             }
           }
