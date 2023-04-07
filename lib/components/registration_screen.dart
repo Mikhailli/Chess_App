@@ -70,7 +70,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             ],
                           );
                         });
-
                       }
                       else {
                         FirebaseAuth.instance
