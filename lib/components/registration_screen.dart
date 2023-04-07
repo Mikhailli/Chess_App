@@ -44,23 +44,36 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     const SizedBox(
                       height: 20,
                     ),
-                    reusableTextField("Enter UserName", Icons.person_outline, false,
+                    reusableTextField("Введите ваш никнейм", Icons.person_outline, false,
                         _userNameTextController),
                     const SizedBox(
                       height: 20,
                     ),
-                    reusableTextField("Enter Email Id", Icons.person_outline, false,
+                    reusableTextField("Введите электронную почту", Icons.person_outline, false,
                         _emailTextController),
                     const SizedBox(
                       height: 20,
                     ),
-                    reusableTextField("Enter Password", Icons.lock_outlined, true,
+                    reusableTextField("Введите пароль", Icons.lock_outlined, true,
                         _passwordTextController),
                     const SizedBox(
                       height: 20,
                     ),
-                    firebaseUIButton(context, "Sign Up", () {
-                      FirebaseAuth.instance
+                    firebaseUIButton(context, "Зарегистрироваться", () {
+                      if(_passwordTextController.text.length < 6) {
+                        showDialog(context: context, builder: (BuildContext context){
+                          return AlertDialog(
+                            title: const Text("Ошибка"),
+                            content: const Text("Пароль должен быть длиннее 6 символов."),
+                            actions: <Widget>[
+                              ElevatedButton(onPressed: () {Navigator.of(context).pop();}, child: const Text("Ок"))
+                            ],
+                          );
+                        });
+
+                      }
+                      else {
+                        FirebaseAuth.instance
                           .createUserWithEmailAndPassword(
                           email: _emailTextController.text,
                           password: _passwordTextController.text)
@@ -68,12 +81,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         if (kDebugMode) {
                           print("Аккаунт создан");
                         }
-                        Navigator.pushNamed(context, 'registration');
+                        Navigator.pushNamed(context, 'home');
                       }).onError((error, stackTrace) {
                         if (kDebugMode) {
                           print("Ошибка ${error.toString()}");
                         }
                       });
+                      }
                     })
                   ],
                 ),
