@@ -54,6 +54,7 @@ class _LoginScreenState extends State<LoginScreen> {
               padding: EdgeInsets.fromLTRB(20, MediaQuery.of(context).size.height * 0.2, 20, 0),
               child: Column(
                 children: <Widget>[
+                  logoWidget(imagePath: "assets/icon/icon.png"),
                   const SizedBox(
                     height: 30,
                   ),

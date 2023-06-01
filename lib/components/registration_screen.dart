@@ -81,6 +81,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           print("Аккаунт создан");
                         }
                         Navigator.pushNamed(context, 'home');
+
                       }).onError((error, stackTrace) {
                         if (kDebugMode) {
                           print("Ошибка ${error.toString()}");

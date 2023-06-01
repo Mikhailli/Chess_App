@@ -59,7 +59,7 @@ class _HomeSettingsScreenState extends State<HomeSettingsScreen> {
 
                     title: '⚒️Сообщить о проблеме',
                     onPressed: () {
-                      Navigator.pushNamed(context, '');
+                      Navigator.pushNamed(context, 'problem_screen');
                     }),
                 RoundedButton(
                     colour: Colors.blue.shade600,
