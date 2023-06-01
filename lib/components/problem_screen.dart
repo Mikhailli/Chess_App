@@ -1,5 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../widgets/reusable_widgets.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProblemScreen extends StatefulWidget {
   const ProblemScreen({Key? key}) : super(key: key);
@@ -14,6 +16,22 @@ class _ProblemScreenState extends State<ProblemScreen> {
   final controllerSubject = TextEditingController();
   final controllerMessage = TextEditingController();
 
+  void _createEmailAsync(String to, String subject, String message) async{
+    final Uri params = Uri(
+        scheme: 'mailto',
+        path: "univernik20@yandex.ru",
+        queryParameters: {
+          'subject': subject,
+          'body': message
+        }
+    );
+    if(await canLaunchUrl(params)){
+      await launchUrl(params);
+    } else {if (kDebugMode) {
+      print("Could not launc");
+    }}
+
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,20 +42,20 @@ class _ProblemScreenState extends State<ProblemScreen> {
           centerTitle: true,
         ),
         body: SingleChildScrollView(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: Column(
             children: [
-              buildTextField(title: "To", controller: controllerTo),
+              buildTextField(title: "Кому", controller: controllerTo, text: "univernik20@yandex.ru", enabled: false),
               const SizedBox(height: 16),
-              buildTextField(title: "Subject", controller: controllerSubject),
+              buildTextField(title: "Причина", controller: controllerSubject, text: ""),
               const SizedBox(height: 16),
-              buildTextField(title: "Message", controller: controllerMessage, maxLines: 8),
+              buildTextField(title: "Сообщение", controller: controllerMessage, maxLines: 8, readonly: true, text: ""),
               const SizedBox(height: 32),
-              // EmailButton(context, )
-
+              emailButton(context, () => _createEmailAsync(controllerTo.text, controllerSubject.text, controllerMessage.text))
             ],
           ),
     ),
     );
+
   }
 }

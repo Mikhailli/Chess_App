@@ -33,9 +33,9 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   Future getCurrentUser() async {
-    User user = FirebaseAuth.instance.currentUser;
+    User? user = FirebaseAuth.instance.currentUser;
     if (kDebugMode) {
-      print("User: ${user.email ?? "None"}");
+      print("User: ${user?.email ?? "None"}");
     }
     if (kDebugMode) {
       print(user);

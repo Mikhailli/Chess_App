@@ -31,7 +31,7 @@ class _HomeSettingsScreenState extends State<HomeSettingsScreen> {
                       children: <Widget>[
                         ListTile(
                           leading: const Icon(Icons.male),//Аватарка
-                          title: Text(FirebaseAuth.instance.currentUser?.displayName == null ? FirebaseAuth.instance.currentUser.email : FirebaseAuth.instance.currentUser.displayName)
+                          title: Text((FirebaseAuth.instance.currentUser?.displayName ?? FirebaseAuth.instance.currentUser?.email) as String)
                         )
                       ],
                     ),
